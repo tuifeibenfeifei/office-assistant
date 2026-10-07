@@ -1,0 +1,107 @@
+<UserControl x:Class="OfficeAssistant.App.Views.HomeScreen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600">
+
+    <!-- 界面 1：主界面（极简入口）
+         规格：标题居中 22px 粗体 + 字距 2px + 轻白光；标题右 24px 处 20px 齿轮（进设置）；
+               水平三张 180×200 玻璃卡片，间距 24px，垂直中线略偏上；
+               底部居中 12px 灰蓝"版本 1.0"；无菜单栏、无侧边栏、无通知区、无说明文字。 -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 标题区 -->
+        <Grid Grid.Row="0" Margin="32,28,32,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!-- 标题整体右移 12px，使"标题+齿轮"这一组的视觉重心仍在窗口中线 -->
+                <TextBlock Text="{Binding ProductName}" Style="{StaticResource T.TitleGlow}" VerticalAlignment="Center"
+                           Margin="12,0,0,0" />
+                <!-- 齿轮：标题右侧 24px，点击进设置，悬停变亮绿 -->
+                <Button x:Name="SettingsButton" Style="{StaticResource Btn.IconGhost}"
+                        Margin="24,0,0,0" Click="OnSettingsClick" ToolTip="设置">
+                    <Path Data="{StaticResource Geo.Gear}" Style="{StaticResource Icon.Base}"
+                          Width="20" Height="20" StrokeThickness="1.8" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- 三张功能卡片区：垂直中线略偏上 -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center"
+                    VerticalAlignment="Center" Margin="0,0,0,40">
+            <StackPanel.Resources>
+                <!-- 卡片内图标：44px 线性图标 + 极淡辉光 -->
+                <Style x:Key="CardIcon" TargetType="Path" BasedOn="{StaticResource Icon.Base}">
+                    <Setter Property="Width" Value="44" />
+                    <Setter Property="Height" Value="44" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="10" ShadowDepth="0" Color="#FFFFFF" Opacity="0.18" />
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+                <Style x:Key="CardName" TargetType="TextBlock">
+                    <Setter Property="FontFamily" Value="{StaticResource Font.UI}" />
+                    <Setter Property="FontSize" Value="16" />
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Text}" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="0,12,0,0" />
+                </Style>
+                <Style x:Key="CardReadout" TargetType="TextBlock">
+                    <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+                    <Setter Property="FontSize" Value="13" />
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Green}" />
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="0,6,0,0" />
+                </Style>
+                <Style x:Key="CardSub" TargetType="TextBlock" BasedOn="{StaticResource T.Caption}">
+                    <Setter Property="HorizontalAlignment" Value="Center" />
+                    <Setter Property="Margin" Value="0,2,0,0" />
+                </Style>
+            </StackPanel.Resources>
+
+            <!-- 卡片 1：网络加速 -->
+            <Button x:Name="NetworkCard" Style="{StaticResource Card.Tile}"
+                    Width="180" Height="200" Margin="0,0,24,0" Click="OnNetworkClick">
+                <StackPanel VerticalAlignment="Center">
+                    <Path Data="{StaticResource Geo.Bolt}" Style="{StaticResource CardIcon}" />
+                    <TextBlock Text="网络加速" Style="{StaticResource CardName}" />
+                    <TextBlock Text="{Binding NetworkValue}" Style="{StaticResource CardReadout}" />
+                    <TextBlock Text="{Binding NetworkNote}" Style="{StaticResource CardSub}" />
+                </StackPanel>
+            </Button>
+
+            <!-- 卡片 2：磁盘管理 -->
+            <Button x:Name="DiskCard" Style="{StaticResource Card.Tile}"
+                    Width="180" Height="200" Margin="0,0,24,0" Click="OnDiskClick">
+                <StackPanel VerticalAlignment="Center">
+                    <Path Data="{StaticResource Geo.Folder}" Style="{StaticResource CardIcon}" />
+                    <TextBlock Text="磁盘管理" Style="{StaticResource CardName}" />
+                    <TextBlock Text="{Binding DiskValue}" Style="{StaticResource CardReadout}" />
+                    <TextBlock Text="{Binding DiskNote}" Style="{StaticResource CardSub}" />
+                </StackPanel>
+            </Button>
+
+            <!-- 卡片 3：内存清理 -->
+            <Button x:Name="MemoryCard" Style="{StaticResource Card.Tile}"
+                    Width="180" Height="200" Click="OnMemoryClick">
+                <StackPanel VerticalAlignment="Center">
+                    <Path Data="{StaticResource Geo.Fan}" Style="{StaticResource CardIcon}" />
+                    <TextBlock Text="内存清理" Style="{StaticResource CardName}" />
+                    <TextBlock Text="{Binding MemoryValue}" Style="{StaticResource CardReadout}" />
+                    <TextBlock Text="{Binding MemoryNote}" Style="{StaticResource CardSub}" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <!-- 底部：版本号 -->
+        <TextBlock Grid.Row="2" Text="{Binding VersionText}" Style="{StaticResource T.Caption}"
+                   HorizontalAlignment="Center" Margin="0,0,0,20" />
+    </Grid>
+</UserControl>

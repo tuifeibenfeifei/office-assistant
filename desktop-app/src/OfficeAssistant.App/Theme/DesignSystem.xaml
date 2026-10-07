@@ -1,0 +1,489 @@
+<!--
+    全能办公助手 · 设计系统
+    严格对齐功能说明文档 3.2（视觉规范）与 3.5（通用组件规格）。
+    所有色值、圆角、字号、动效时长都取自文档，改动需同步文档。
+
+    实现注记：WPF 里 RenderTransform / Effect 内部的对象不进入模板命名域，
+    因此按钮的缩放与辉光都直接对元素本身做动画（RenderTransform 用 ScaleTransform 实例，
+    辉光用 Opacity 动画），而不是命名内部对象——否则解析期会报 MC4111。
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- ============ 3.2 视觉规范：色值 ============ -->
+    <Color x:Key="GradientTopColor">#0A1633</Color>
+    <Color x:Key="GradientBottomColor">#122B57</Color>
+
+    <SolidColorBrush x:Key="Brush.GradientTop" Color="#0A1633" />
+    <SolidColorBrush x:Key="Brush.GradientBottom" Color="#122B57" />
+
+    <!-- 卡片：半透明白底 + 1px 半透明白边框 -->
+    <SolidColorBrush x:Key="Brush.CardFill" Color="#0FFFFFFF" />
+    <SolidColorBrush x:Key="Brush.CardBorder" Color="#2EFFFFFF" />
+    <SolidColorBrush x:Key="Brush.CardFillHover" Color="#1AFFFFFF" />
+
+    <!-- 主操作绿 -->
+    <Color x:Key="AccentGreenColor">#22E584</Color>
+    <SolidColorBrush x:Key="Brush.Green" Color="#22E584" />
+    <SolidColorBrush x:Key="Brush.GreenDim" Color="#8022E584" />
+
+    <!-- 科技蓝（选中/链接） -->
+    <SolidColorBrush x:Key="Brush.Blue" Color="#3B82F6" />
+
+    <!-- 文字三级 -->
+    <SolidColorBrush x:Key="Brush.Text" Color="#FFFFFF" />
+    <SolidColorBrush x:Key="Brush.TextSoft" Color="#9BB6E5" />
+    <SolidColorBrush x:Key="Brush.TextFaint" Color="#6B7FA3" />
+
+    <!-- 危险色（文档 3.5：永久删除类操作用） -->
+    <SolidColorBrush x:Key="Brush.Red" Color="#E5484D" />
+
+    <!-- 分隔线：1px 浅蓝半透明 -->
+    <SolidColorBrush x:Key="Brush.Divider" Color="#2E9BB6E5" />
+
+    <!-- ============ 3.2 视觉规范：字体与间距 ============ -->
+    <FontFamily x:Key="Font.UI">Microsoft YaHei UI, Microsoft YaHei, Source Han Sans SC, Segoe UI</FontFamily>
+    <FontFamily x:Key="Font.Mono">Consolas, Cascadia Mono, Microsoft YaHei UI, monospace</FontFamily>
+
+    <sys:Double x:Key="Radius.Card">16</sys:Double>
+    <sys:Double x:Key="Radius.Button">12</sys:Double>
+    <CornerRadius x:Key="Corner.Card">16</CornerRadius>
+    <CornerRadius x:Key="Corner.Button">12</CornerRadius>
+    <CornerRadius x:Key="Corner.Small">8</CornerRadius>
+
+    <Thickness x:Key="PagePadding">32</Thickness>
+
+    <!-- 卡片阴影：0 8px 32px rgba(0,0,0,0.35) -->
+    <DropShadowEffect x:Key="Shadow.Card" BlurRadius="32" ShadowDepth="8" Direction="270"
+                      Color="#000000" Opacity="0.35" />
+    <!-- 主操作辉光：0 0 16px rgba(34,229,132,0.5)（用 Opacity 动画控制强弱，见实现注记） -->
+    <DropShadowEffect x:Key="Glow.Green" BlurRadius="20" ShadowDepth="0" Color="#22E584" Opacity="0.5" />
+
+    <!-- ============ 3.3 动效：过渡 150-250ms，ease-out ============ -->
+    <Duration x:Key="Duration.Quick">0:0:0.15</Duration>
+    <Duration x:Key="Duration.Normal">0:0:0.2</Duration>
+    <Duration x:Key="Duration.Slow">0:0:0.25</Duration>
+    <CubicEase x:Key="Ease.Out" EasingMode="EaseOut" />
+    <QuadraticEase x:Key="Ease.InOut" EasingMode="EaseInOut" />
+
+    <!-- ============ 基础排版 ============ -->
+    <Style x:Key="T.Title" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Font.UI}" />
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text}" />
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal" />
+    </Style>
+
+    <!-- 标题：轻微白光 0 0 12px rgba(255,255,255,0.2)，仅主界面使用 -->
+    <Style x:Key="T.TitleGlow" TargetType="TextBlock" BasedOn="{StaticResource T.Title}">
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="12" ShadowDepth="0" Color="#FFFFFF" Opacity="0.2" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="T.Body" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Font.UI}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <Style x:Key="T.Soft" TargetType="TextBlock" BasedOn="{StaticResource T.Body}">
+        <Setter Property="Foreground" Value="{StaticResource Brush.TextSoft}" />
+    </Style>
+
+    <Style x:Key="T.Caption" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Font.UI}" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.TextFaint}" />
+    </Style>
+
+    <Style x:Key="T.Num" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Mono}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.TextSoft}" />
+    </Style>
+
+    <!-- 每个界面顶部的居中标题 -->
+    <Style x:Key="T.ScreenTitle" TargetType="TextBlock" BasedOn="{StaticResource T.Title}">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- ============ 3.5 通用组件：按钮 ============ -->
+    <!-- 主按钮：亮绿底白字、常态辉光；悬停辉光增强；按下缩小 0.97；禁用灰蓝 40% -->
+    <Style x:Key="Btn.Primary" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource Font.UI}" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <!-- 同上：亮绿底配深色字才清晰，但必须显式写，否则会被隐式样式的近黑色继承 -->
+        <Setter Property="Foreground" Value="#062315" />
+        <Setter Property="Background" Value="{StaticResource Brush.Green}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Height" Value="38" />
+        <Setter Property="MinWidth" Value="120" />
+        <Setter Property="Padding" Value="20,0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid RenderTransformOrigin="0.5,0.5">
+                        <Grid.RenderTransform>
+                            <ScaleTransform x:Name="Sc" ScaleX="1" ScaleY="1" />
+                        </Grid.RenderTransform>
+                        <!-- 辉光层：单独一层带 Effect，用 Opacity 做强弱动画 -->
+                        <Border x:Name="GlowLayer" CornerRadius="{StaticResource Corner.Button}"
+                                Background="{StaticResource Brush.Green}"
+                                Effect="{StaticResource Glow.Green}" />
+                        <Border x:Name="Bd" CornerRadius="{StaticResource Corner.Button}"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="GlowLayer" Storyboard.TargetProperty="Opacity"
+                                                         To="1" Duration="{StaticResource Duration.Quick}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="GlowLayer" Storyboard.TargetProperty="Opacity"
+                                                         To="0.55" Duration="{StaticResource Duration.Quick}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleX"
+                                                         To="0.97" Duration="{StaticResource Duration.Quick}" />
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleY"
+                                                         To="0.97" Duration="{StaticResource Duration.Quick}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleX"
+                                                         To="1" Duration="{StaticResource Duration.Quick}" />
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleY"
+                                                         To="1" Duration="{StaticResource Duration.Quick}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.TextFaint}" />
+                            <Setter TargetName="GlowLayer" Property="Opacity" Value="0" />
+                            <Setter Property="Foreground" Value="#E6FFFFFF" />
+                            <Setter Property="Opacity" Value="0.4" />
+                            <Setter Property="Cursor" Value="Arrow" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 次级按钮：半透明白底 + 1px 白边框 + 白字 -->
+    <Style x:Key="Btn.Secondary" TargetType="Button">
+        <Setter Property="FontFamily" Value="{StaticResource Font.UI}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <!--
+            必须显式指定这三个属性，并在模板里用 TemplateBinding 取用。
+            原因：App.xaml 里还有一个**隐式** Button 样式（浅色主题遗留），
+            隐式样式在运行时解析、优先级高于同名的 Style Setter，
+            只写 Setter 会被它盖掉——表现就是"深蓝底上黑字看不见、边框发白"。
+            走 TemplateBinding 可以绕开这层覆盖。
+        -->
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text}" />
+        <Setter Property="Background" Value="#1FFFFFFF" />
+        <Setter Property="BorderBrush" Value="#59FFFFFF" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="MinWidth" Value="96" />
+        <Setter Property="Padding" Value="16,0" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid RenderTransformOrigin="0.5,0.5">
+                        <Grid.RenderTransform>
+                            <ScaleTransform x:Name="Sc" ScaleX="1" ScaleY="1" />
+                        </Grid.RenderTransform>
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="{StaticResource Corner.Button}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#3322E584" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Green}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleX"
+                                                         To="0.97" Duration="{StaticResource Duration.Quick}" />
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleY"
+                                                         To="0.97" Duration="{StaticResource Duration.Quick}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleX"
+                                                         To="1" Duration="{StaticResource Duration.Quick}" />
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleY"
+                                                         To="1" Duration="{StaticResource Duration.Quick}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4" />
+                            <Setter Property="Cursor" Value="Arrow" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 危险按钮：红底白字（用于"永久删除"这类不可恢复操作） -->
+    <Style x:Key="Btn.Danger" TargetType="Button" BasedOn="{StaticResource Btn.Secondary}">
+        <Setter Property="Background" Value="{StaticResource Brush.Red}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Red}" />
+        <Setter Property="Foreground" Value="#FFFFFF" />
+    </Style>
+
+    <!-- ============ 3.5 通用组件：44×24 圆形拨动开关（切换 150ms 缓动） ============ -->
+    <Style x:Key="Toggle.Switch" TargetType="CheckBox">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <Grid Width="44" Height="24">
+                        <Border x:Name="Track" CornerRadius="12"
+                                Background="#33FFFFFF" BorderBrush="#2EFFFFFF" BorderThickness="1" />
+                        <Ellipse x:Name="Knob" Width="18" Height="18" Fill="#FFFFFF"
+                                 HorizontalAlignment="Left" Margin="3,0,0,0">
+                            <Ellipse.RenderTransform>
+                                <TranslateTransform x:Name="Shift" X="0" />
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Track" Property="Background" Value="{StaticResource Brush.Green}" />
+                            <Setter TargetName="Track" Property="BorderBrush" Value="{StaticResource Brush.Green}" />
+                            <Setter TargetName="Track" Property="Effect" Value="{StaticResource Glow.Green}" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Shift" Storyboard.TargetProperty="X"
+                                                         To="20" Duration="{StaticResource Duration.Quick}"
+                                                         EasingFunction="{StaticResource Ease.Out}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Shift" Storyboard.TargetProperty="X"
+                                                         To="0" Duration="{StaticResource Duration.Quick}"
+                                                         EasingFunction="{StaticResource Ease.Out}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Track" Property="Opacity" Value="0.4" />
+                            <Setter Property="Cursor" Value="Arrow" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ============ 卡片 ============ -->
+    <Style x:Key="Card.Glass" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource Brush.CardFill}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.CardBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{StaticResource Corner.Card}" />
+        <Setter Property="Effect" Value="{StaticResource Shadow.Card}" />
+    </Style>
+
+    <!--
+        可点击卡片（文档 3.3）：悬停上浮 2px + 边框辉光提亮；按下缩小 0.98。
+        用 Button 承载而不是 Border：Border 没有 Template 属性，
+        而且 Button 自带键盘焦点与空格/回车触发，符合人机工学要求。
+    -->
+    <Style x:Key="Card.Tile" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource Brush.CardFill}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.CardBorder}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid RenderTransformOrigin="0.5,0.5">
+                        <Grid.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform x:Name="Sc" ScaleX="1" ScaleY="1" />
+                                <TranslateTransform x:Name="Tt" Y="0" />
+                            </TransformGroup>
+                        </Grid.RenderTransform>
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{StaticResource Corner.Card}"
+                                Effect="{StaticResource Shadow.Card}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Green}" />
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.CardFillHover}" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Tt" Storyboard.TargetProperty="Y"
+                                                         To="-2" Duration="{StaticResource Duration.Quick}"
+                                                         EasingFunction="{StaticResource Ease.Out}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Tt" Storyboard.TargetProperty="Y"
+                                                         To="0" Duration="{StaticResource Duration.Quick}"
+                                                         EasingFunction="{StaticResource Ease.Out}" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                        <!-- 按下（含键盘空格/回车）缩小到 0.98 -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleX"
+                                                         To="0.98" Duration="0:0:0.1" />
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleY"
+                                                         To="0.98" Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleX"
+                                                         To="1" Duration="0:0:0.1" />
+                                        <DoubleAnimation Storyboard.TargetName="Sc" Storyboard.TargetProperty="ScaleY"
+                                                         To="1" Duration="0:0:0.1" />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 图标按钮（齿轮 / 返回箭头）：圆形半透明，悬停变亮绿 -->
+    <Style x:Key="Btn.IconCircle" TargetType="Button">
+        <Setter Property="Width" Value="36" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Background" Value="#1AFFFFFF" />
+        <Setter Property="BorderBrush" Value="#2EFFFFFF" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Bd" CornerRadius="18" Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#3322E584" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Green}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="#5522E584" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 无边框图标按钮（标题行右侧，仅图标可点） -->
+    <Style x:Key="Btn.IconGhost" TargetType="Button" BasedOn="{StaticResource Btn.IconCircle}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+    </Style>
+
+    <!-- ============ 细滚动条 ============ -->
+    <Style x:Key="Scroll.Thin" TargetType="ScrollBar">
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid Background="Transparent">
+                        <Track x:Name="PART_Track" IsDirectionReversed="True">
+                            <Track.Thumb>
+                                <Thumb>
+                                    <Thumb.Template>
+                                        <ControlTemplate TargetType="Thumb">
+                                            <Border CornerRadius="4" Background="#409BB6E5" Margin="1,0" />
+                                        </ControlTemplate>
+                                    </Thumb.Template>
+                                </Thumb>
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" />
+                            </Track.IncreaseRepeatButton>
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" />
+                            </Track.DecreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

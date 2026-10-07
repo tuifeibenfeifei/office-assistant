@@ -1,0 +1,16 @@
+# 统一换行符：避免在 Windows 上克隆后出现整文件 diff
+* text=auto eol=lf
+
+# 二进制资源不做换行处理
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.docx binary
+*.db binary
+
+# PowerShell 脚本保持 CRLF（Windows 习惯），并声明为文本以便 diff 可读
+*.ps1 text eol=crlf
+*.cmd text eol=crlf
+*.bat text eol=crlf

@@ -1,0 +1,50 @@
+# ============================================================================
+# 全能办公助手 / dsh 插件 —— 仓库忽略规则
+#
+# 原则：只跟踪源码与文档。构建产物、运行期数据、调试残留一律不入库。
+# 特别注意 dist 下的 data 目录：扫描一次 C 盘就会生成 1 GB 以上的 SQLite 库，
+# 它属于运行期数据，绝对不能被提交。
+# ============================================================================
+
+# ---- .NET 构建产物
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+.vs/
+
+# ---- 打包与运行期产物
+dist/
+publish/
+# 程序在便携模式下会把数据写在程序目录旁的 data 子目录
+data/
+*.db
+*.db-wal
+*.db-shm
+logs/
+*.log
+
+# ---- 第三方依赖（本项目零依赖，但保留以防误提交）
+node_modules/
+
+# ---- 调试与临时文件
+_debug/
+_dbg-*/
+_*test*.txt
+_*test*.cmd
+_launch-*.ps1
+_verify-*.ps1
+restart-regression.txt
+startup-report.txt
+*.tmp
+
+# ---- 编辑器与系统
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- 插件仓库
+# dsh-office-assistant / dsh-peak-hours 各自是独立仓库（含自己的 .git），
+# 父仓库不会跟踪它们的内容。

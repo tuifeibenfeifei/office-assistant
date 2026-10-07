@@ -1,0 +1,76 @@
+<!--
+    全能办公助手 · 线性图标集
+    文档 3.5 规定：全部使用同一套线性图标风格（描边 1.8px、圆角端点、镂空），
+    且仅允许以下图标：齿轮、返回箭头、闪电、文件夹、风扇、垃圾桶、加号、减号、对勾、圆点。
+    这里用 Path + Stroke 实现描边图标，Viewbox 保证任意尺寸清晰（矢量）。
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 描边图标基样式：统一 1.8px、圆角端点、不填充 -->
+    <Style x:Key="Icon.Base" TargetType="Path">
+        <Setter Property="StrokeThickness" Value="1.8" />
+        <Setter Property="StrokeStartLineCap" Value="Round" />
+        <Setter Property="StrokeEndLineCap" Value="Round" />
+        <Setter Property="StrokeLineJoin" Value="Round" />
+        <Setter Property="Fill" Value="{x:Null}" />
+        <Setter Property="Stretch" Value="Uniform" />
+        <Setter Property="Stroke" Value="{StaticResource Brush.Text}" />
+    </Style>
+
+    <!-- 实心图标（闪电按钮内 48px 实心闪电用） -->
+    <Style x:Key="Icon.Solid" TargetType="Path">
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="Stretch" Value="Uniform" />
+        <Setter Property="Fill" Value="{StaticResource Brush.Text}" />
+    </Style>
+
+    <!-- 齿轮（20px 标题齿轮 / 设置入口） -->
+    <Geometry x:Key="Geo.Gear">
+        M 12,1.6 A 2.4,2.4 0 1 1 11.99,1.6 Z
+        M 12,7.6 A 4.4,4.4 0 1 1 11.99,7.6 Z
+        M 12,0.9 L 12,3.4 M 12,20.6 L 12,23.1
+        M 0.9,12 L 3.4,12 M 20.6,12 L 23.1,12
+        M 4.15,4.15 L 5.9,5.9 M 18.1,18.1 L 19.85,19.85
+        M 4.15,19.85 L 5.9,18.1 M 18.1,5.9 L 19.85,4.15
+    </Geometry>
+
+    <!-- 返回箭头 -->
+    <Geometry x:Key="Geo.Back">M 15,4 L 7,12 L 15,20</Geometry>
+
+    <!-- 闪电（线性） -->
+    <Geometry x:Key="Geo.Bolt">M 13,2 L 5.5,13.2 L 11,13.2 L 10,22 L 18.5,10.4 L 13,10.4 Z</Geometry>
+
+    <!-- 闪电（实心：按钮内 48px 用） -->
+    <Geometry x:Key="Geo.BoltSolid">M 13.6,1.4 L 4.6,13.4 L 10.6,13.4 L 9.4,22.6 L 19.4,9.8 L 13.2,9.8 Z</Geometry>
+
+    <!-- 文件夹 -->
+    <Geometry x:Key="Geo.Folder">M 3,6.5 A 1.5,1.5 0 0 1 4.5,5 L 9,5 L 11,7.5 L 19.5,7.5 A 1.5,1.5 0 0 1 21,9 L 21,17.5 A 1.5,1.5 0 0 1 19.5,19 L 4.5,19 A 1.5,1.5 0 0 1 3,17.5 Z</Geometry>
+
+    <!-- 风扇（内存清理） -->
+    <Geometry x:Key="Geo.Fan">
+        M 12,12 m -1.6,0 a 1.6,1.6 0 1 0 3.2,0 a 1.6,1.6 0 1 0 -3.2,0
+        M 12,10.4 C 12,6 10.6,2.6 7.8,2.6 C 5.6,2.6 4.6,4.4 5.6,6 C 6.6,7.6 9.2,9 12,10.4 Z
+        M 13.4,13.2 C 17.4,15.2 20.9,15.4 21.7,12.8 C 22.4,10.7 21,9.2 19.2,9.8 C 17.4,10.4 15.2,11.8 13.4,13.2 Z
+        M 10.6,13.2 C 7.4,15.9 5.7,18.9 7.6,20.6 C 9.1,22 11.1,21.4 11.3,19.5 C 11.5,17.6 11,14.8 10.6,13.2 Z
+    </Geometry>
+
+    <!-- 垃圾桶（画布右下角悬浮 / 删除操作） -->
+    <Geometry x:Key="Geo.Trash">
+        M 4.5,7 L 19.5,7
+        M 9.5,7 L 9.5,4.8 A 1,1 0 0 1 10.5,3.8 L 13.5,3.8 A 1,1 0 0 1 14.5,4.8 L 14.5,7
+        M 6.5,7 L 7.4,19.6 A 1.4,1.4 0 0 0 8.8,20.9 L 15.2,20.9 A 1.4,1.4 0 0 0 16.6,19.6 L 17.5,7
+        M 10.6,10.6 L 10.9,17.4 M 13.4,10.6 L 13.1,17.4
+    </Geometry>
+
+    <!-- 加号 / 减号（画布缩放按钮） -->
+    <Geometry x:Key="Geo.Plus">M 12,5.5 L 12,18.5 M 5.5,12 L 18.5,12</Geometry>
+    <Geometry x:Key="Geo.Minus">M 5.5,12 L 18.5,12</Geometry>
+
+    <!-- 对勾（完成反馈） -->
+    <Geometry x:Key="Geo.Check">M 4.5,12.8 L 9.6,18 L 19.5,6.5</Geometry>
+
+    <!-- 感叹/待判断角标用的小三角 -->
+    <Geometry x:Key="Geo.Warn">M 12,3.6 L 21.4,20 L 2.6,20 Z M 12,9.5 L 12,14.5 M 12,16.8 L 12,17.2</Geometry>
+
+</ResourceDictionary>

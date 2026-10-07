@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!--
+      关闭 SDK 隐式 using：WPF 与 WinForms 的隐式 using 会让 MessageBox / Button /
+      TextBox / Binding / Color / HorizontalAlignment 等类型二义。
+      改为在 GlobalUsings.cs 中集中声明所需的全局 using 与别名。
+    -->
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!-- 同时启用 WPF 与 WinForms 时 SDK 不会自动生成 Main，由 App.xaml.cs 显式提供 STA 入口点 -->
+    <StartupObject>OfficeAssistant.App.App</StartupObject>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>OfficeAssistant.App</RootNamespace>
+    <AssemblyName>全能办公助手</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <AssemblyTitle>全能办公助手</AssemblyTitle>
+    <Product>全能办公助手</Product>
+    <Company>全能办公助手</Company>
+    <Version>1.0.0</Version>
+    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <InformationalVersion>1.0.0</InformationalVersion>
+    <NoWarn>$(NoWarn);CA1416;WFO5001</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OfficeAssistant.Core\OfficeAssistant.Core.csproj" />
+  </ItemGroup>
+
+</Project>

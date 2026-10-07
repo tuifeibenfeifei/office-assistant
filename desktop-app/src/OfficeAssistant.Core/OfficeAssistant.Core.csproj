@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>OfficeAssistant.Core</RootNamespace>
+    <AssemblyName>OfficeAssistant.Core</AssemblyName>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <NoWarn>$(NoWarn);CA1416</NoWarn>
+  </PropertyGroup>
+
+  <!--
+    核心库不开启 UseWPF / UseWindowsForms（避免 Windows Forms 的隐式 using 与
+    System.IO.DriveInfo 冲突，保持引擎与 UI 技术无关），只通过 FrameworkReference
+    取得 WindowsDesktop 框架，用于 System.Drawing.Common 的图片解码/缩略图生成。
+  -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App" />
+  </ItemGroup>
+
+</Project>
