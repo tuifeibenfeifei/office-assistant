@@ -48,3 +48,6 @@ desktop.ini
 # ---- 插件仓库
 # dsh-office-assistant / dsh-peak-hours 各自是独立仓库（含自己的 .git），
 # 父仓库不会跟踪它们的内容。
+
+# ---- 本机辅助脚本（一次性推送用，不属于交付内容）
+push-to-github.*
