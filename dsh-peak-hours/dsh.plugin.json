@@ -1,0 +1,19 @@
+{
+  "name": "dsh-peak-hours",
+  "version": "1.0.0",
+  "title": {
+    "zh": "DeepSeek 峰谷时段",
+    "en": "Peak Hours"
+  },
+  "description": {
+    "zh": "侧边栏常驻显示当前计费档期与倒计时（高峰标准价 / 空闲半价），以北京时间为权威轴换算本地时间，周末与节假日全天谷价；并提供 dsh_peak_hours 工具供 Agent 安排长任务。",
+    "en": "Persistent sidebar indicator for the current DeepSeek pricing tier with countdown (peak standard price / off-peak half price), Beijing-time authority converted to local time, weekend and holiday off-peak pricing, plus a dsh_peak_hours tool for scheduling long tasks."
+  },
+  "author": "",
+  "homepage": "https://github.com/tuifeibenfeifei/dsh-peak-hours",
+  "repository": "https://github.com/tuifeibenfeifei/dsh-peak-hours",
+  "license": "MIT",
+  "entry": "index.js",
+  "client": "client.js",
+  "patch": "cordis.patch.yml"
+}

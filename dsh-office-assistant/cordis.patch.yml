@@ -1,0 +1,11 @@
+# dsh-office-assistant — dsh profile 插件行。
+#
+# 把"办公助手"的能力挂进 dsh：Agent 可以直接扫描磁盘、清理临时文件、整理内存、
+# 处理 JSON 与文本编码。config 段全部可省略。
+- insert:
+    - id: office-assistant
+      name: 'dsh-office-assistant'
+      config:
+        # 是否注册 office_text / office_scan / office_clean / office_memory 四个工具。
+        # 设为 false 后只保留侧边栏的内存状态面板。
+        exposeTools: true

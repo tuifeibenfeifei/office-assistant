@@ -1,0 +1,22 @@
+# dsh-peak-hours — dsh profile 插件行。
+#
+# 它把本插件的 Host 半侧挂进 profile 的层叠配置。config 段全部可省略，
+# 省略时使用官方默认规则（工作日 09:00–12:00 / 14:00–18:00 为高峰，周末全天谷价）。
+- insert:
+    - id: peak-hours
+      name: 'dsh-peak-hours'
+      config:
+        # 是否注册 dsh_peak_hours 工具给 Agent 使用。设为 false 后仍保留界面指示。
+        exposeTool: true
+        # 周末是否全天按空闲价（官方 2026-08-23 规则）。设为 false 则周末也按工作日峰谷计费。
+        weekendAlwaysOffPeak: true
+        # 额外按空闲价计费的自然日（北京时间，YYYY-MM-DD）。用于法定节假日。
+        holidayDays: []
+        # 被强制当作工作日、仍按峰谷计费的自然日（北京时间）。用于调休上班的周末。
+        workdayOverrides: []
+        # 覆盖工作日高峰窗口（北京时间）。留空/非法值会回落到官方默认窗口。
+        # peakWindows:
+        #   - start: '09:00'
+        #     end: '12:00'
+        #   - start: '14:00'
+        #     end: '18:00'

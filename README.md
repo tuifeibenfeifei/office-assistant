@@ -30,15 +30,16 @@ Windows 10/11（64 位）桌面办公辅助工具，托盘常驻。**界面只�
 │       ├── OfficeAssistant.Core/   引擎：扫描、识别、清理与安全、资源管家、网络、合规审计
 │       ├── OfficeAssistant.App/    WPF 界面：设计系统、四个界面、托盘
 │       └── OfficeAssistant.Tests/  13 项引擎自测
-├── dsh-office-assistant/           dsh 插件：给 Agent 四个办公工具（独立仓库）
-├── dsh-peak-hours/                 dsh 插件：DeepSeek 峰谷时段助手（独立仓库）
+├── dsh-office-assistant/           dsh 插件：给 Agent 四个办公工具
+├── dsh-peak-hours/                 dsh 插件：DeepSeek 峰谷时段助手
 ├── docs/                           架构设计 / 使用说明 / 验收与自查报告 / 界面截图
 └── specs/                          功能说明与项目计划书（需求来源，保留存档）
 ```
 
 `dist/`（便携版产物）与运行期数据不入库，见 `.gitignore`。
 
-两个 dsh 插件在本仓库内是**独立仓库**（各有自己的 `.git`），父仓库不跟踪它们的内容，需分别推送。
+三个部分放在同一个仓库里（而不是子模块），克隆一次就能拿到全部内容，不需要 `--recurse-submodules`。
+每个子目录都能独立使用：`desktop-app/` 是完整的 .NET 解决方案，两个 dsh 插件各自零依赖、可直接安装。
 
 ---
 

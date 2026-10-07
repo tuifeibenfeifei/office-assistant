@@ -1,0 +1,63 @@
+{
+  "name": "dsh-peak-hours",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "DeepSeek 峰谷时段助手（dsh 插件）：侧边栏常驻显示当前是高峰还是空闲、距离切换多久；以北京时间为权威轴换算到你的本地时间；周末与节假日全天谷价；并给 Agent 一个 dsh_peak_hours 工具，让它能把算力密集的长任务挑到半价时段。",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis-plugin",
+    "peak",
+    "off-peak",
+    "pricing",
+    "deepseek-api"
+  ],
+  "license": "MIT",
+  "icon": "./icon.svg",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-sidebar",
+        "@deepseek-ai/dsh-client-ui-conversation",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  },
+  "meta": {
+    "title": "DeepSeek 峰谷时段 / Peak Hours",
+    "description": "侧边栏常驻显示当前计费档期与倒计时：高峰（标准价）/ 空闲（半价）。以北京时间为权威轴并换算到本地时间，周末与节假日按全天谷价处理；同时给 Agent 一个 dsh_peak_hours 工具，可以把长任务安排到半价时段。"
+  },
+  "scripts": {
+    "test": "node tests/run.js"
+  },
+  "files": [
+    "index.js",
+    "client.js",
+    "lib",
+    "locale",
+    "tests",
+    "cordis.patch.yml",
+    "icon.svg",
+    "README.md",
+    "README.zh-CN.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "dsh-office-assistant",
+  "version": "1.0.0",
+  "title": {
+    "zh": "办公助手",
+    "en": "Office Assistant"
+  },
+  "description": {
+    "zh": "给 Agent 四个办公工具：文本与 JSON 处理、只读磁盘占用扫描、系统临时目录清理（走回收站可恢复）、内存查看与工作集整理。侧边栏常驻内存占用。",
+    "en": "Four office tools for the agent: text and JSON handling, read-only disk usage scanning, system temp cleanup (recycle bin, recoverable), and memory inspection/trimming. A sidebar panel shows live memory usage."
+  },
+  "author": "",
+  "homepage": "https://github.com/tuifeibenfeifei/dsh-office-assistant",
+  "repository": "https://github.com/tuifeibenfeifei/dsh-office-assistant",
+  "license": "MIT",
+  "entry": "index.js",
+  "client": "client.js",
+  "patch": "cordis.patch.yml"
+}

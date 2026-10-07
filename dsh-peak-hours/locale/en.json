@@ -1,0 +1,4 @@
+{
+  "title": "Peak Hours",
+  "description": "A persistent sidebar indicator for the current DeepSeek API pricing tier with a countdown: peak (standard price) or off-peak (half price). Beijing time is the authority and is converted to your local time; weekends and holidays are treated as off-peak all day. The plugin also gives the agent a dsh_peak_hours tool so long, compute-heavy tasks can be scheduled into the cheaper window."
+}
